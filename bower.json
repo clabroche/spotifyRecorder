@@ -1,0 +1,12 @@
+{
+  "name": "weblab",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "semantic": "^2.2.7",
+    "codemirror": "^5.24.2",
+    "chart.js": "^2.5.0",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.2"
+  }
+}

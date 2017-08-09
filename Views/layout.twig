@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>
+            {% block title %}WebLab{% endblock %}
+        </title>
+
+        <script src="/bower/jquery/dist/jquery.min.js"></script>
+        <!-- Semantic -->
+        {% block stylesheets %}
+          <link rel="stylesheet" href="/bower/semantic/dist/semantic.min.css"/>
+          <link rel="stylesheet" href="/css/app.css"/>
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        {% endblock %}
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script> <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> <![endif]-->
+    </head>
+    <body>
+        {% block navbar %}
+            {% include 'app/navbar.twig' %}
+        {% endblock %}
+
+        {% block flash %}
+            {% include 'app/flash.twig' %}
+        {% endblock %}
+
+        {% block body %}{% endblock %}
+
+        {% block footer %}
+            {% include 'app/footer.twig' %}
+        {% endblock %}
+
+
+        <script src="/bower/semantic/dist/semantic.min.js"></script>
+        <script src="/js/lib/socket.io.min.js"></script>
+        {% if socket is defined %}
+            <script type="text/javascript" src="/js/controller/controller.js"></script>
+        {% endif %}
+    </body>
+</html>

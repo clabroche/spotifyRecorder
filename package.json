@@ -1,0 +1,57 @@
+{
+  "name": "weblab",
+  "version": "1.0.0",
+  "description": "University of Lorraine - Tutored Project for the final year of a BS in Computer Science.",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "master": "nodemon -e twig,js Master/app.js",
+    "slave": " nodemon Slave/app.js --ignore Slave/public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TPCISIIE/WebLab.git"
+  },
+  "author": "Xavier CHOPIN, Corentin LABROCHE, David LEBRUN",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TPCISIIE/WebLab/issues"
+  },
+  "homepage": "https://github.com/TPCISIIE/WebLab#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "cpu-stat": "^2.0.1",
+    "express": "^4.14.0",
+    "find-port": "^2.0.1",
+    "id3-parser": "^1.2.0",
+    "ip": "^1.1.4",
+    "jquery": "^3.2.1",
+    "morgan": "~1.7.0",
+    "mpg123": "^0.2.3",
+    "node-sass-middleware": "0.9.8",
+    "nodemon": "^1.11.0",
+    "perfy": "*",
+    "promptly": "^2.1.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.1.1",
+    "socket.io": "^1.7.2",
+    "superagent": "^3.5.2",
+    "twig": "^1.10.4",
+    "util-each": "^1.0.1",
+    "vm2": "^3.4.6"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-jquery": "^1.0.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-friendly-formatter": "^2.0.7",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-promise": "^3.4.1",
+    "eslint-plugin-standard": "^2.0.1"
+  }
+}
