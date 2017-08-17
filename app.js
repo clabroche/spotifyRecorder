@@ -21,5 +21,5 @@ middlewaresBefore(express, app, io)
 app.use('/', index, result)
 middlewaresAfter(express, app, io)
 
-// socket(io)
+socket(io)
 server.listen(config.port)

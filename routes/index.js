@@ -6,14 +6,12 @@ var request = require('request')
 var http = require('https');
 var fs = require('fs');
 var path = require('path');
-
-
-
 const dbusCommand = 'dbus-send --print-reply '
 const dbusdest = '--dest=org.mpris.MediaPlayer2.spotify '
 const dbuspath = '/org/mpris/MediaPlayer2 '
 const dbusmethod = 'org.mpris.MediaPlayer2.Player.'
 const bdd = require(path.resolve(__dirname, '..', 'bdd.json'))
+const queue = require('../modules/queue')
 router.get('/', (req, res, next) => {
   new HomeController(req, res, next).index()
 })
@@ -29,8 +27,6 @@ router.get('/search/:search', (req, res, next) => {
     console.log(error);
     res.sendStatus(401)
   })
-  console.log('Authorization: Bearer ' + bdd.access_token);
-
 })
 
 router.get('/spotify', (req, res, next) => {
@@ -39,7 +35,7 @@ router.get('/spotify', (req, res, next) => {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code,
-      redirect_uri: 'http://corentinlabroche.ddns.net:3000/spotify',
+      redirect_uri: 'http://localhost:3000/spotify',
       grant_type: 'authorization_code'
     },
     headers: {
@@ -61,16 +57,19 @@ router.get('/spotify', (req, res, next) => {
 })
 
 router.get('/login', (req, res, next) => {
-  res.redirect('https://accounts.spotify.com/en/authorize?show_dialog=true&response_type=code&redirect_uri=http://corentinlabroche.ddns.net:3000/spotify&scope=user-read-email%20user-read-private&client_id=0cc7b7a909054c3c973ee387b227ed2f')
+  res.redirect('https://accounts.spotify.com/en/authorize?show_dialog=true&response_type=code&redirect_uri=http://localhost:3000/spotify&scope=user-read-email%20user-read-private&client_id=0cc7b7a909054c3c973ee387b227ed2f')
 })
+
+
+
+
 router.get('/method/:method/:param', (req, res, next) => {
-  console.log(dbusCommand + dbusdest + dbuspath + dbusmethod + req.params.method);
   cp.exec(dbusCommand + dbusdest + dbuspath + dbusmethod + req.params.method)
   res.sendStatus(200)
   // new HomeController(req, res, next).index()
 })
 router.get('/open/:id', (req, res, next) => {
-  cp.exec('sp open ' + req.params.id)
+  queue.add(req.params.id)
   res.sendStatus(200)
   // new HomeController(req, res, next).index()
 })

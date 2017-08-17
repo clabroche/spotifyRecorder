@@ -2,10 +2,79 @@
   box-sizing: border-box;
 }
 
+.main {
+  margin-top: 75px;
+  margin-bottom: 150px;
+  display: flex;
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  top: 75px;
+  bottom: 150px;
+  width: 90vw;
+  height: 100vh;
+  background-color: #303030;
+
+  h1 {
+    text-align: center;
+    color: rgb(255, 122, 0);
+    padding: 10px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-size: 3em;
+
+    li {
+      display: flex;
+      align-items: center;
+
+      .cover {
+        height: 75px;
+        width: 75px;
+        background-size: cover;
+      }
+
+      .name {
+        padding-left: 20px;
+        flex-grow: 1;
+        text-align: center;
+      }
+
+      .progressbar {
+        border-radius: 1000px;
+        width: 200px;
+        height: 25px;
+        background-color: rgba(255,255,255,0.2);
+
+        .progressbarInternal {
+          border-radius: 1000px;
+          width: 50%;
+          background-color: rgb(255, 122, 0);
+          height: 100%;
+        }
+      }
+      height: 75px;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-collapse: collapse;
+      border-left: none;
+      list-style: none;
+      margin: 0;
+    }
+  }
+}
+
 .searchResultSpotify {
   display: flex;
+  flex-grow: 1;
   flex-flow: row wrap;
   justify-content: center;
+
   .spotifyItem {
     margin: auto;
     box-sizing: border-box;
@@ -29,9 +98,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   height: 75px;
-  background-color: rgb(25,25,25);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
 
   form {
     margin: auto;
@@ -59,7 +128,7 @@ body {
   bottom: 0;
   left: 0;
   background-color: green;
-  width: 100vw;
+  width: 100%;
   height: 150px;
   flex-flow: row wrap;
 
@@ -103,5 +172,32 @@ body {
     right: 0;
     width: 150px;
     background-color: red;
+  }
+}
+
+.boot {
+  display: flex;
+  align-items: center;
+  background-color: #252525;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  justify-content: center;
+
+  .anim {
+    font-size: 3em;
+    display: flex;
+    text-align: center;
+    background-color: black;
+    width: 0;
+    height: 0;
+    border-radius: 50vw;
+    margin-top: 0;
+    justify-content: center;
+    align-items: center;
+
+    .logo {}
   }
 }

@@ -1,43 +1,11 @@
 {% extends 'layout.twig' %}
 {% block body %}
-  <div class="connect to spotify">
-    <a href="/login">connect to spotify</a>
-  </div>
-  <div class="">
-    <h1>Local</h1>
-  </div>
-  <div class="load">
-    Load
-  </div>
-  <div class="jukebox">
-    <div class="jukeboxLeft"></div>
-    <div class="jukeboxCenter">
-      <div class="currentInfos">
-        <div class="currentArtist"></div>-
-        <div class="currentAlbum"></div>-
-        <div class="currentTitle"></div>
-      </div>
-      <div class="controls">
-        <div class="previousSpotify">
-          <i class="fa fa-step-backward" aria-hidden="true"></i>
-        </div>
-        <div class="playPauseSpotify">
-          <i class="fa fa-play" aria-hidden="true"></i>
-        </div>
-        <div class="nextSpotify">
-          <i class="fa fa-step-forward" aria-hidden="true"></i>
-        </div>
-      </div>
+
+  <!-- {% include 'app/components/jukebox.twig' %} -->
+  <div class="main">
+    <div class="searchResultSpotify">
+      <h1>Spotify</h1>
     </div>
-    <div class="jukeboxRight"></div>
   </div>
-
-  <div class=""></div>
-  <div class=""></div>
-  <div class="">
-    <h1>Spotify</h1>
-  </div>
-
-  <div class="searchResultSpotify"></div>
 
 {% endblock %}

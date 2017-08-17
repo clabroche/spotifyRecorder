@@ -1,10 +1,66 @@
-let socket = io('http://corentinlabroche.ddns.net:3000')
+let socket = io('http://localhost:3000')
 // Recuperation des serveurs deja connecte
 socket.on('connection', (init) => {
-  console.log('connection');
+  console.log(init);
+})
+socket.emit('connection', true)
+$('body').append(
+  $('<div>').addClass('boot').append(
+    $('<div>').addClass('anim').append(
+      $('<div>').addClass('logo').text('SpotiRecorder')
+    )
+  )
+)
+
+
+
+socket.on('init', function(){
+  setTimeout(function () {
+    $('.boot').fadeToggle('300')
+  }, 1000);
+})
+
+socket.on('queueAdd', function (data) {
+  for (var i = 0; i < data.length; i++) {
+    $('.menu ul').append('<li>').text(data[i])
+  }
 })
 
 
+let triggerToggle = false
+let interval
+$('.trigger').click(data=>{
+  triggerToggle = !triggerToggle
+  const move = 90
+  if (triggerToggle) {
+    interval = setInterval(function(){
+
+    },500)
+    $('.menu').animate({left:'-=90vw'},1000)
+    $('body').animate({marginRight:'+=90vw'},1000)
+  }
+  else{
+    $('.menu').animate({left:'+=90vw'},1000)
+    $('body').animate({marginRight:'-=90vw'},1000)
+  }
+})
+
+let x = 0
+setInterval(function() {
+  $('.anim').css({
+    background: "radial-gradient(rgba(0,0,0,0.1)60%,rgba(0,0,0,1) 100%)",
+    width: "+=6px",
+    height: "+=6px"
+  })
+  if (x > ~~($('body').height() / 1.8)) {
+    x = 0
+    $('.anim').css({
+      width: "0px",
+      height: "0px"
+    })
+  }
+  x+=6
+}, 25);
 
 $('.load').click(data => {
   socket.emit('load', '/data/MUSIQUE/MUSIQUE/Adagio/Archangels in Black/01 Vamphyri.mp3')
@@ -53,7 +109,7 @@ $('.inputSearchSpotify').change(function() {
       }).append(artDiv, artistDiv)
       $('.searchResultSpotify').append(item)
     }
-  }).fail((textstatus)=>{
+  }).fail((textstatus) => {
     window.location.replace("/login");
   })
 })
