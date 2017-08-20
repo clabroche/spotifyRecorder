@@ -20,13 +20,24 @@ socket.on('init', function(){
   }, 1000);
 })
 
-socket.on('queueAdd', function (data) {
+socket.on('getDownload',data=>{
+  data = data.currentQueue
+  $('.menu ul').empty()
   for (var i = 0; i < data.length; i++) {
-    $('.menu ul').append('<li>').text(data[i])
+    $('.menu ul').append(createDownloadMenu(data[i]))
   }
 })
 
 
+function createDownloadMenu(data){
+  return $('<li>').append(
+      $('<div>').addClass('cover'),
+      $('<div>').addClass('name').text(data.artists[0].name+  '-' +data.name),
+      $('<div>').addClass('progressbar').append(
+        $('<div>').addClass('progressbarInternal')
+      )
+    )
+}
 let triggerToggle = false
 let interval
 $('.trigger').click(data=>{
@@ -34,12 +45,13 @@ $('.trigger').click(data=>{
   const move = 90
   if (triggerToggle) {
     interval = setInterval(function(){
-
+      socket.emit('getDownload')
     },500)
     $('.menu').animate({left:'-=90vw'},1000)
     $('body').animate({marginRight:'+=90vw'},1000)
   }
   else{
+    clearInterval(interval)
     $('.menu').animate({left:'+=90vw'},1000)
     $('body').animate({marginRight:'-=90vw'},1000)
   }
@@ -66,7 +78,6 @@ $('.load').click(data => {
   socket.emit('load', '/data/MUSIQUE/MUSIQUE/Adagio/Archangels in Black/01 Vamphyri.mp3')
 })
 $('.playPause').click(data => {
-  console.log('click');
   socket.emit('playPause')
 })
 
@@ -93,11 +104,9 @@ $('.stopSpotify').click(_ => {
   sendAjax("/method/Stop")
 })
 $('.inputSearchSpotify').change(function() {
-  console.log('klj');
   $('.searchResultSpotify').empty()
   if (!$('.inputSearchSpotify').val().length) return
   sendAjax("/search/" + $('.inputSearchSpotify').val()).done(result => {
-    console.log(result);
     for (i = 0; i < result.length; i++) {
       const artistDiv = $('<div>').addClass('artistSpotify').text(result[i].name)
       const artDiv = $('<div>').addClass('art').css({

@@ -50,10 +50,11 @@ function SwitcherSink() {
   });
 }
 
-SwitcherSink.prototype.record = function(uri) {
-  if (uri) {
+SwitcherSink.prototype.record = function(track) {
+  if (track.uri) {
+    this.track = track
     const recorder = this.sinks[this.inactiveRecorders.shift()].recorder
-    recorder.record(uri).then(sink_name=>{
+    recorder.record(track).then(sink_name=>{
       this.inactiveRecorders.push(sink_name)
       this.emit('askTask')
     })

@@ -18,7 +18,7 @@ function Record(options) {
 
 // create the Encoder instance
 
-Record.prototype.record = function(spotifyId) {
+Record.prototype.record = function(track) {
   return new Promise(async(resolve, reject) => {
     this.encoder = new lame.Encoder({
       // input
@@ -34,37 +34,39 @@ Record.prototype.record = function(spotifyId) {
     if (this.options.hasOwnProperty('dbus')) {
       this.dbus = this.options.dbus
     }
-    const commandlaunchTrack = "dbus-send  --print-reply --session --type=method_call --dest=" + this.dbus + " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.OpenUri string:" + spotifyId
-    const launch = await bash(commandlaunchTrack);
+    const commandlaunchTrack = "dbus-send  --print-reply --session --type=method_call --dest=" + this.dbus + " /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.OpenUri string:" + track.uri
+    await bash(commandlaunchTrack);
     await helpers.blockExecution(1000)
     await stop(this.dbus)
     await helpers.blockExecution(500)
     await previous(this.dbus)
     await helpers.blockExecution(1000)
-    const metadata = await getMetadata(this.dbus)
     this.rec = spawn('parec', ['-d', this.options.sink_name + '.monitor']);
     this.rec.stdout.pipe(this.encoder);
-    const filename = metadata.artist + '-' + metadata.album + '-' + metadata.title + '.mp3'
+    const filename = track.artists[0].name + '-' + track.album.name + '-' + track.name + '.mp3'
     this.output = await fs.createWriteStream(filename)
     this.encoder.pipe(this.output)
     await play(this.dbus)
     console.log('recording: ' + this.output.path);
-    await helpers.blockExecution(metadata.ms)
+    await helpers.blockExecution(track.duration_ms)
     this.output.end()
 
     this.rec.kill('SIGTERM')
     console.log('finish: ' + this.output.path);
     const songBuffer = fs.readFileSync(filename);
     const writer = new ID3Writer(songBuffer);
-    request.get(metadata.art, (err, res, body) => {
-      writer.setFrame('TIT2', metadata.title) // title
-        .setFrame('TPE1', [metadata.artist]) //artist
-        .setFrame('TALB', metadata.album) // album
+    request.get(track.album.images[0].url, (err, res, art) => {
+      if (err) {
+        reject(err)
+      }
+      writer.setFrame('TIT2', track.name) // title
+        .setFrame('TPE1', [track.artists[0].name]) //artist
+        .setFrame('TALB', track.album.name) // album
         // .setFrame('TYER', 2004) // date
-        .setFrame('TRCK', metadata.track) // track
+        .setFrame('TRCK', track.track_number) // track
         .setFrame('APIC', {
           type: 3,
-          data: body,
+          data: art,
           description: 'Super picture'
         });
       writer.addTag();
@@ -106,26 +108,4 @@ function previous(dbus) {
   const commandplay = 'dbus-send  --print-reply --session --type=method_call --dest=' + dbus + ' /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
   return bash(commandplay)
 }
-
-
-async function getMetadata(dbus) {
-  const metadataString = "dbus-send --print-reply --dest=" + dbus + " /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'"
-  const commandstatus = `dbus-send --print-reply --dest=${dbus} /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'PlaybackStatus'|egrep -A 1 "string"|cut -b 26-|cut -d '"' -f 1|egrep -v ^$`
-  const commandartist = metadataString + `|egrep -A 2 "artist"|egrep -v "artist"|egrep -v "array"|cut -b 27-|cut -d '"' -f 1|egrep -v ^$`
-  const commandalbum = metadataString + `|egrep -A 1 "album"|egrep -v "album"|cut -b 44-|cut -d '"' -f 1|egrep -v ^$`
-  const commandlength = metadataString + `|egrep -A 1 "length"|egrep -v "length"|cut -b 43-|cut -d '"' -f 1|egrep -v ^$`
-  const commandarturl = metadataString + `|egrep -A 1 "artUrl"|egrep -v "artUrl"|cut -b 44-|cut -d '"' -f 1|egrep -v ^$`
-  const commandtrack = metadataString + `|egrep -A 1 "trackNumber"|egrep -v "trackNumber"|cut -b 41-|cut -d '"' -f 1|egrep -v ^$`
-  const commandtitle = metadataString + `|egrep -A 1 "title"|egrep -v "title"|cut -b 44-|cut -d '"' -f 1|egrep -v ^$`
-  return {
-    artist: await bash(commandartist),
-    album: await bash(commandalbum),
-    title: await bash(commandtitle),
-    track: await bash(commandtrack),
-    status: await bash(commandstatus),
-    art: await bash(commandarturl),
-    ms: +(await bash(commandlength)) / 1000
-  }
-}
-
 module.exports = Record

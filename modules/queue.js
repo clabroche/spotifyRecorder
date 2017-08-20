@@ -1,22 +1,27 @@
 const Queue = {}
-Queue.init = function(socket) {
+Queue.init = function() {
   this.queue = []
-  // console.log(socket)
-  this.io = socket
+  this.currentQueue = []
+  this.doneQueue = []
 }
 Queue.add = function(spotifyId) {
   this.queue.push(spotifyId)
 }
 Queue.get = function(){
-  return this.queue.shift()
+  const task = this.queue.shift()
+  if (task!==undefined) {
+    this.currentQueue.push(task)
+  }
+  return task
 }
 
 Queue.all = function() {
-  const array = []
-  for (var i = 0; i < Object.keys(this.queue).length; i++) {
-    array.push(this.queue[Object.keys(this.queue)[i]])
+  console.log(this.currentQueue);
+
+  return {
+    currentQueue: this.currentQueue,
+    queue: this.queue
   }
-  return array;
 }
 
 Queue.remove = function(id) {

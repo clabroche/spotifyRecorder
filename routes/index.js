@@ -28,7 +28,6 @@ router.get('/search/:search', (req, res, next) => {
     res.sendStatus(401)
   })
 })
-
 router.get('/spotify', (req, res, next) => {
   const code = req.query.code
   var authOptions = {
@@ -55,25 +54,25 @@ router.get('/spotify', (req, res, next) => {
   })
   // new HomeController(req, res, next).index()
 })
-
 router.get('/login', (req, res, next) => {
   res.redirect('https://accounts.spotify.com/en/authorize?show_dialog=true&response_type=code&redirect_uri=http://localhost:3000/spotify&scope=user-read-email%20user-read-private&client_id=0cc7b7a909054c3c973ee387b227ed2f')
 })
-
-
-
-
 router.get('/method/:method/:param', (req, res, next) => {
   cp.exec(dbusCommand + dbusdest + dbuspath + dbusmethod + req.params.method)
   res.sendStatus(200)
   // new HomeController(req, res, next).index()
 })
 router.get('/open/:id', (req, res, next) => {
-  queue.add(req.params.id)
-  res.sendStatus(200)
-  // new HomeController(req, res, next).index()
+  console.log(req.params.id.split(':')[2]);
+  sendBearerRequest('https://api.spotify.com/v1/tracks/' + req.params.id.split(':')[2]).then(result=>{
+    console.log(result);
+    queue.add(result)
+    res.sendStatus(200)
+  }).catch(error=>{
+    console.log(error);
+    res.sendStatus(401)
+  })
 })
-
 function sendBearerRequest(url) {
   return new Promise(function(resolve, reject) {
     var authOptions = {

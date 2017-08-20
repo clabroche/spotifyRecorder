@@ -20,10 +20,10 @@ function Manager(options) {
 
 Manager.prototype.launch = function() {
   this.switcher.on('askTask', (data) => {
-    const spotifyId = queue.get()
-    if (spotifyId) {
-      console.log(spotifyId);
-      this.switcher.record(spotifyId)
+    const task = queue.get()
+    if (task) {
+      console.log(task);
+      this.switcher.record(task)
     }
   })
 }
