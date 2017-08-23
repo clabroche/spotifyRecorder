@@ -2,6 +2,7 @@ const lame = require('lame');
 const ID3Writer = require('browser-id3-writer');
 const path = require('path');
 const fs = require('fs')
+const queue = require('../queue')
 var request = require('request').defaults({
   encoding: null
 });
@@ -9,6 +10,7 @@ const helpers = require('./helpers')
 const URL = require('url');
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
+const mkdirp = require('mkdirp2').promise
 
 function Record(options) {
   this.options = options || {}
@@ -41,19 +43,25 @@ Record.prototype.record = function(track) {
     await helpers.blockExecution(500)
     await previous(this.dbus)
     await helpers.blockExecution(1000)
-    this.rec = spawn('parec', ['-d', this.options.sink_name + '.monitor']);
-    this.rec.stdout.pipe(this.encoder);
-    const filename = track.artists[0].name + '-' + track.album.name + '-' + track.name + '.mp3'
-    this.output = await fs.createWriteStream(filename)
-    this.encoder.pipe(this.output)
+    const filename = track.track_number + '-' + track.artists[0].name + '-' + track.album.name + '-' + track.name + '.mp3'
+    await mkdirp(path.resolve(__dirname, '../../', 'musics', track.artists[0].name, track.album.name))
+      this.rec = spawn('parec', ['-d', this.options.sink_name + '.monitor']);
+      this.rec.stdout.pipe(this.encoder);
     await play(this.dbus)
+    this.output = await fs.createWriteStream(path.resolve(__dirname, '../../', 'musics', track.artists[0].name, track.album.name, filename))
+    this.encoder.pipe(this.output)
     console.log('recording: ' + this.output.path);
+    const interval = setInterval(function() {
+      queue.updateTime(track.uri, this._idleStart)
+    }, 500)
     await helpers.blockExecution(track.duration_ms)
+    clearInterval(interval)
+    queue.done(track.uri)
     this.output.end()
 
     this.rec.kill('SIGTERM')
     console.log('finish: ' + this.output.path);
-    const songBuffer = fs.readFileSync(filename);
+    const songBuffer = fs.readFileSync(path.resolve(__dirname, '../../', 'musics', track.artists[0].name, track.album.name, filename));
     const writer = new ID3Writer(songBuffer);
     request.get(track.album.images[0].url, (err, res, art) => {
       if (err) {
@@ -71,7 +79,7 @@ Record.prototype.record = function(track) {
         });
       writer.addTag();
       const taggedSongBuffer = Buffer.from(writer.arrayBuffer);
-      fs.writeFileSync(filename, taggedSongBuffer);
+      fs.writeFileSync(path.resolve(__dirname, '../../', 'musics', track.artists[0].name, track.album.name, filename), taggedSongBuffer);
       resolve(this.options.sink_name)
     });
   });

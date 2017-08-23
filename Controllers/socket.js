@@ -6,14 +6,24 @@ const jukebox = JukeBox.init()
 
 var queue = require('../modules/queue')
 const Manager = require('../modules/app')
+const Arduino = require('../modules/arduino/index.js')
 
 let init = false
-let socket = (io) => {
+let socket = async (io) => {
   queue.init(io)
   new Manager().then(self=>{
     self.launch()
     init = true
   })
+  // const arduino = new Arduino()
+  // await arduino.initBoard()
+  // await arduino.initWatcher()
+  // setInterval(function () {
+  //   const percents = queue.getPercent()
+  //   if (percents[0]) {
+  //     arduino.updateWatcher(arduino.percentToString(percents[0])+arduino.percentToString(percent[0]))
+  //   }
+  // }, 500);
   init=true
   io.on('connection', (socket) => {
     socket.on('connection', async (path) => {

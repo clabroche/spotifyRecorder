@@ -75,12 +75,12 @@ async function launcher(arduino){
   await arduino.initWatcher()
   return arduino
 }
-
-
-const arduino  = new Arduino()
-launcher(arduino).then(data=>{
-
-}).catch(err=>console.error(err))
+//
+//
+// const arduino  = new Arduino()
+// launcher(arduino).then(data=>{
+//
+// }).catch(err=>console.error(err))
 //
 //
 // arduino.updateWatcher('Bonjour Julien!')

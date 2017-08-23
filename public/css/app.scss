@@ -12,12 +12,11 @@
   position: absolute;
   top: 0;
   left: 100%;
-  top: 75px;
-  bottom: 150px;
+  top: 0;
   width: 90vw;
   height: 100vh;
   background-color: #303030;
-
+  overflow-y: scroll;
   h1 {
     text-align: center;
     color: rgb(255, 122, 0);
@@ -27,23 +26,23 @@
   ul {
     margin: 0;
     padding: 0;
-    width: 100%;
-    font-size: 3em;
+    width: 95%;
+    margin: auto;
+    font-size: 1.2em;
 
     li {
       display: flex;
       align-items: center;
 
       .cover {
-        height: 75px;
-        width: 75px;
+        height: 50px;
+        width: 50px;
         background-size: cover;
       }
 
       .name {
         padding-left: 20px;
         flex-grow: 1;
-        text-align: center;
       }
 
       .progressbar {
@@ -59,12 +58,11 @@
           height: 100%;
         }
       }
-      height: 75px;
-      border: 1px solid rgba(255,255,255,0.5);
-      border-collapse: collapse;
-      border-left: none;
+      height: 50px;
       list-style: none;
       margin: 0;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
   }
 }
@@ -74,7 +72,8 @@
   flex-grow: 1;
   flex-flow: row wrap;
   justify-content: center;
-
+  height: calc(100vh - 75px);
+  overflow-y: scroll;
   .spotifyItem {
     margin: auto;
     box-sizing: border-box;
@@ -92,33 +91,78 @@
 }
 
 .navbar {
+  margin-top: 0;
   position: fixed;
   top: 0;
   left: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 75px;
+  width: 90px;
+  height: 100vh;
   background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-
-  form {
-    margin: auto;
+  list-style: none;
+  padding: 0;
+  .trigger{
+    display: inline-block;
+    margin-left: 0;
   }
-
+  .search{
+    top: 0;
+    position: absolute;
+    left: 0;
+    margin-left: 90px;
+    width:0 ;
+    display: none;
+    height: 100vh;
+    background-color: #252525;
+    border: 1px solid rgb(255, 122, 0);
+    .head{
+      background-color:  rgb(255, 122, 0);
+    }
+  }
+  li{
+    i{
+      width: 70px;
+      height: 70px;
+      text-align: center;
+      line-height: 70px;
+      background-color: rgba(255, 255, 255, 0.1);
+      font-size: 2em;
+      border-radius: 90px;
+      border: 1px solid rgb(255, 122, 0);
+      color: rgb(255, 122, 0);
+    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    width: 100%;
+    line-height: 100%;
+  }
+  form{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   input {
-    margin: auto;
-    background-color: rgba(255,255,255,0.2);
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 1.5em;
+    background-color: rgba(255,255,255,0.8);
+    color: black;
     border: 1px solid rgba(0,0,0,0.8);
     padding: 10px;
     border-radius: 75px;
-    width: 30vw;
+    width: 75px;
+    height: 40px;
     text-align: center;
   }
 }
 
 body {
-  background-color: rgb(30,30,30);
+  background: linear-gradient(135deg, #001516 0%,#000224 100%);
   color: white;
 }
 

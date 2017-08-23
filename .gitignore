@@ -10,3 +10,7 @@ jspm_packages
 *.css.map
 Master/public/stylesheets/css/app.css
 Master/public/bower
+musics
+bdd.json
+tmp/
+public/tmp

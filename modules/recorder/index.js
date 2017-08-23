@@ -39,7 +39,6 @@ function SwitcherSink() {
         dbus: this.dbus[i]
       })
     }
-    await helpers.blockExecution(1000)
     this.inputs = await getInputs()
     this.sinks = await moveSinks(this.sinks, this.inputs)
     this.watcher = setInterval(() => {

@@ -1,8 +1,17 @@
-<div class="navbar">
-  <form action="#">
-    <input class="inputSearchSpotify" type="text" placeholder="Search on spotify">
-  </form>
-  <div class="trigger">
-    Trigger
-  </div>
-</div>
+<ul class="navbar">
+  <li>
+    <i class="fa fa-spotify searchItem" aria-hidden="true"></i>
+    <div class="search">
+      <form class='head' action="#">
+        <input class="inputSearchSpotify" id="track" type="text" placeholder="&#9836;">
+        <input class="inputSearchSpotify" id="album" type="text" placeholder="&#128191;">
+        <input class="inputSearchSpotify" id="artist" type="text" placeholder="&#128104;&#127908;">
+      </form>
+      <div class="searchResultSpotify"></div>
+    </div>
+  </li>
+
+  <li>
+    <i class="fa fa-download trigger" aria-hidden="true"></i>
+  </li>
+</ul>
